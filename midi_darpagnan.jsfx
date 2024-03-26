@@ -138,13 +138,11 @@ function generate_steps() (
 );
 
 function compute_step_length() local (t, n, f) (
-  step_length == 0 ? (
-    t = 60 / tempo;
-    n = 2 ^ (floor(slider1 / 3) - 4);
-    f = slider1 % 3;
-    f == 0 ? f = 2/3 : f == 2 ? f = 3/2;
-    step_length = t * n * f;
-  );
+  t = 60 / tempo;
+  n = 2 ^ (floor(slider1 / 3) - 4);
+  f = slider1 % 3;
+  f == 0 ? f = 2/3 : f == 2 ? f = 3/2;
+  step_length = t * n * f;
 );
 
 function process_midi() local (tr offset msg1 msg2 msg3) (
@@ -218,8 +216,10 @@ retrigger = slider5;
 single_note = slider6;
 generate_steps();
 
-@sample
+@block
 compute_step_length();
+
+@sample
 t = (t + 1) % (srate * step_length * num_steps);
 
 // process midi
