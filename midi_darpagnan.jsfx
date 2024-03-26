@@ -28,12 +28,6 @@ about:
         the last note of each cycle, so for example `cegCgecegCgec...`.
    - `Octaves` is used to add octaves above the played notes. It does exactly
      the same thing as if you added transposed copies of all the notes you play.
-   - `Backtrack every X steps...` & `...by Y steps` are two controls
-     you can use to create variations of the four base algorithms.
-     They do exactly what they say they do: every X steps within the
-     sequence the algorithm will go back Y steps and "play through"
-     the Y already played steps again. So from e.g. `cegCEGC`, a setting
-     of `X = 3` and `Y = 1` would yield `cegegCgCECEG`.
    - `Note length` can be used to make the emitted notes shorter.
      By default the notes are the full specified `Step size` long, but
      at 1/32 triplets at 180bpm stuff gets crazy sometimes and notes could
@@ -56,11 +50,9 @@ about:
 slider1:7<0,23,1{1/64 triplet,1/64,1/64 dotted,1/32 triplet,1/32,1/32 dotted,1/16 triplet,1/16,1/16 dotted,1/8 triplet,1/8,1/8 dotted,1/4 triplet,1/4,1/4 dotted,1/2 triplet,1/2,1/2 dotted,1/1 triplet,1/1,1/1 dotted,2/1 triplet,2/1,2/1 dotted}>Step size
 slider2:0<0,3,1{up,down,up&down,up&down alt}>Algorithm
 slider3:1<1,4,1>Octaves
-slider4:2<2,6,1>Backtrack every X steps...
-slider5:0<0,4,1>...by Y steps
-slider6:100<0,100,1>Note length (%)
-slider7:0<0,1,1{off,on}>Retrigger
-slider8:0<0,1,1{off,on}>Single-note playthrough
+slider4:100<0,100,1>Note length (%)
+slider5:0<0,1,1{off,on}>Retrigger
+slider6:0<0,1,1{off,on}>Single-note playthrough
 
 in_pin:none
 out_pin:none
@@ -74,8 +66,6 @@ t = 0;
 algo = 0;
 step_length = 0;
 octaves = 0;
-backtrack_every = 0;
-backtrack_steps = 0;
 note_len = 0;
 retrigger = 0;
 single_note = 0;
@@ -128,13 +118,7 @@ function generate_steps_unidirectional(d o) local (n s nn ns) (
   s = 0; n = d < 0 ? nn - 1 : 0; while (s < ns) (
     steps[s + o] = notes[n % num_notes] + 12 * floor(n / num_notes);
     s += 1;
-
-    backtrack_steps > 0 && s % backtrack_every == 0 ? (
-      n -= d * backtrack_steps;
-      ns += backtrack_steps + 1;
-    ) : (
-      n += d;
-    );
+    n += d;
   );
 
   /* return */ num_steps = ns;
@@ -224,21 +208,14 @@ function advance_seq() local (p pi s) (
 );
 
 @slider
-slider5 >= slider4 ? (
-  slider5 = slider4 - 1;
-  sliderchange();
-);
-
 step = -1;
 t = 0;
 step_length = 0;
 algo = slider2;
 octaves = slider3;
-backtrack_every = slider4;
-backtrack_steps = slider5;
-note_len = slider6 / 100;
-retrigger = slider7;
-single_note = slider8;
+note_len = slider4 / 100;
+retrigger = slider5;
+single_note = slider6;
 generate_steps();
 
 @sample
