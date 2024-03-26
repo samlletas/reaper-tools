@@ -167,21 +167,21 @@ function process_midi() local (tr offset msg1 msg2 msg3) (
   tr = 0;
 
   while (midirecv(offset, msg1, msg2, msg3)) (
-     // normalize note on / velocity 0 to note off
-     msg1 == $x90 && msg3 == 0 ? (
-       msg1 = $x80;
-     );
+    // normalize note on / velocity 0 to note off
+    msg1 == $x90 && msg3 == 0 ? (
+      msg1 = $x80;
+    );
 
-     msg1 == $x90 ? (
-       add_note(msg2) > -1 ? tr = 1;
-     ) : msg1 == $x80 ? (
-       // forward note off
-       midisend(offset, msg1, msg2, msg3);
-       rem_note(msg2) > -1 ? tr = 1;
-     ) : (
-       // passthru
-       midisend(offset, msg1, msg2, msg3);
-     );
+    msg1 == $x90 ? (
+      add_note(msg2) > -1 ? tr = 1;
+    ) : msg1 == $x80 ? (
+      // forward note off
+      midisend(offset, msg1, msg2, msg3);
+      rem_note(msg2) > -1 ? tr = 1;
+    ) : (
+      // passthru
+      midisend(offset, msg1, msg2, msg3);
+    );
   );
 
   /* return */ tr;
@@ -224,7 +224,6 @@ function advance_seq() local (p pi s) (
 );
 
 @slider
-
 slider5 >= slider4 ? (
   slider5 = slider4 - 1;
   sliderchange();
