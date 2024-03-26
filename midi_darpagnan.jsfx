@@ -47,7 +47,7 @@ about:
      just the offending bar and leave the rest of your arrange untouched.
 
 
-slider1:7<0,23,1{1/64 triplet,1/64,1/64 dotted,1/32 triplet,1/32,1/32 dotted,1/16 triplet,1/16,1/16 dotted,1/8 triplet,1/8,1/8 dotted,1/4 triplet,1/4,1/4 dotted,1/2 triplet,1/2,1/2 dotted,1/1 triplet,1/1,1/1 dotted,2/1 triplet,2/1,2/1 dotted}>Step size
+slider1:7<0,23,1{1/64 triplet,1/64,1/64 dotted,1/32 triplet,1/32,1/32 dotted,1/16 triplet,1/16,1/16 dotted,1/8 triplet,1/8,1/8 dotted,1/4 triplet,1/4,1/4 dotted,1/2 triplet,1/2,1/2 dotted,1/1 triplet,1/1,1/1 dotted,2/1 triplet,2/1,2/1 dotted}>Resolution
 slider2:0<0,3,1{up,down,up&down,up&down alt}>Algorithm
 slider3:1<1,4,1>Octaves
 slider4:100<0,100,1>Note length (%)
@@ -62,9 +62,10 @@ notes = 1024; num_notes = 0;
 steps = 2048; num_steps = 0;
 note = -1;
 step = -1;
-t = 0;
-algo = 0;
 step_length = 0;
+t = 0;
+reso = 0;
+algo = 0;
 octaves = 0;
 note_len = 0;
 retrigger = 0;
@@ -139,8 +140,8 @@ function generate_steps() (
 
 function compute_step_length() local (t, n, f) (
   t = 60 / tempo;
-  n = 2 ^ (floor(slider1 / 3) - 4);
-  f = slider1 % 3;
+  n = 2 ^ (floor(reso / 3) - 4);
+  f = reso % 3;
   f == 0 ? f = 2/3 : f == 2 ? f = 3/2;
   step_length = t * n * f;
 );
@@ -208,7 +209,7 @@ function advance_seq() local (p pi s) (
 @slider
 step = -1;
 t = 0;
-step_length = 0;
+reso = slider1;
 algo = slider2;
 octaves = slider3;
 note_len = slider4 / 100;
