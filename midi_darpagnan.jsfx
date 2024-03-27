@@ -39,12 +39,12 @@ about:
      or only when there's a period of silence (even if it's only a millisecond long).
 
 
-slider1:0<0,3,1{up,down,up&down,up&down alt}>Algorithm
+slider1:0<0,3,1{Up,Down,Up&Down,Up&Down Alt}>Algorithm
 slider2:1<1,4,1>Octaves
-slider3:7<0,23,1{1/64 triplet,1/64,1/64 dotted,1/32 triplet,1/32,1/32 dotted,1/16 triplet,1/16,1/16 dotted,1/8 triplet,1/8,1/8 dotted,1/4 triplet,1/4,1/4 dotted,1/2 triplet,1/2,1/2 dotted,1/1 triplet,1/1,1/1 dotted,2/1 triplet,2/1,2/1 dotted}>Resolution
+slider3:7<0,23,1{1/64 Triplet,1/64,1/64 Dotted,1/32 Triplet,1/32,1/32 Dotted,1/16 Triplet,1/16,1/16 Dotted,1/8 Triplet,1/8,1/8 Dotted,1/4 Triplet,1/4,1/4 Dotted,1/2 Triplet,1/2,1/2 Dotted,1/1 Triplet,1/1,1/1 Dotted,2/1 Triplet,2/1,2/1 Dotted}>Resolution
 slider4:gate=1<0.1,1,0.1>Gate
 slider5:velocity=127<0,127,1>Velocity
-slider6:retrigger=0<0,1,1{no,yes}>Retrigger on note change
+slider6:retrigger=0<0,1,1{No,Yes}>Retrigger on note change
 
 in_pin:none
 out_pin:none
