@@ -43,7 +43,7 @@ slider1:0<0,3,1{Up,Down,Up&Down,Up&Down Alt}>Algorithm
 slider2:1<1,4,1>Octaves
 slider3:7<0,23,1{1/64 Triplet,1/64,1/64 Dotted,1/32 Triplet,1/32,1/32 Dotted,1/16 Triplet,1/16,1/16 Dotted,1/8 Triplet,1/8,1/8 Dotted,1/4 Triplet,1/4,1/4 Dotted,1/2 Triplet,1/2,1/2 Dotted,1/1 Triplet,1/1,1/1 Dotted,2/1 Triplet,2/1,2/1 Dotted}>Resolution
 slider4:gate=1<0.1,1,0.1>Gate
-slider5:velocity=127<0,127,1>Velocity (0=use played velocity)
+slider5:velocity=0<0,127,1>Velocity (0=use played velocity)
 slider6:retrigger=0<0,1,1{No,Yes}>Retrigger on note change
 
 in_pin:none
