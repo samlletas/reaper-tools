@@ -51,8 +51,9 @@ slider1:0<0,3,1{up,down,up&down,up&down alt}>Algorithm
 slider2:1<1,4,1>Octaves
 slider3:7<0,23,1{1/64 triplet,1/64,1/64 dotted,1/32 triplet,1/32,1/32 dotted,1/16 triplet,1/16,1/16 dotted,1/8 triplet,1/8,1/8 dotted,1/4 triplet,1/4,1/4 dotted,1/2 triplet,1/2,1/2 dotted,1/1 triplet,1/1,1/1 dotted,2/1 triplet,2/1,2/1 dotted}>Resolution
 slider4:gate=1<0.1,1,0.1>Gate
-slider5:retrigger=0<0,1,1{off,on}>Retrigger
-slider6:single_note=0<0,1,1{off,on}>Single-note playthrough
+slider5:velocity=127<0,127,1>Velocity
+slider6:retrigger=0<0,1,1{off,on}>Retrigger
+slider7:single_note=0<0,1,1{off,on}>Single-note playthrough
 
 in_pin:none
 out_pin:none
@@ -182,7 +183,7 @@ function restart_seq() (
   num_steps > 0 ? (
     step = 0;
     note = steps[step];
-    midisend(0, $x90, note, 90);
+    midisend(0, $x90, note, velocity);
   );
 );
 
@@ -196,7 +197,7 @@ function advance_seq() local (p pi s) (
     note > -1 ? midisend(0, $x80, note, 0);
     step = s;
     note = steps[step];
-    midisend(0, $x90, note, 90);
+    midisend(0, $x90, note, velocity);
   ) : note > -1 && (p - pi) >= gate ? (
     midisend(0, $x80, note, 0);
     note = -1;
