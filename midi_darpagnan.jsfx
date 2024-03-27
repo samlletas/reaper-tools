@@ -205,12 +205,15 @@ function advance_seq() local (p pi s) (
 );
 
 @slider
-step = -1;
-t = 0;
-algo = slider1;
-octaves = slider2;
-resolution = slider3;
-generate_steps();
+algo != slider1 ||octaves != slider2 || resolution != slider3 ? (
+  // if a main slider changed, reset step state
+  step = -1;
+  t = 0;
+  algo = slider1;
+  octaves = slider2;
+  resolution = slider3;
+  generate_steps();
+);
 
 @block
 compute_step_length();
