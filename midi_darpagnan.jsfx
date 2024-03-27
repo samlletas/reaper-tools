@@ -37,14 +37,6 @@ about:
    - `Retrigger` allows you to choose whether to restart the sequence
      from the beginning when any one note is changed (ie. added or removed),
      or only when there's a period of silence (even if it's only a millisecond long).
-   - `Single-note playthrough` controls the arpeggiator's behaviour when
-     only a single note is being played. Most arpeggiators will retrigger
-     that single note in the defined step length, potentially adding octaves
-     above or below. d'Arpagnan allows you to let the note play as is
-     instead. This is useful in situations where you want to override
-     what the arpeggiator is doing in that _one_ bar without having to
-     bounce the whole thing to MIDI - with this setting on, you can bounce
-     just the offending bar and leave the rest of your arrange untouched.
 
 
 slider1:0<0,3,1{up,down,up&down,up&down alt}>Algorithm
@@ -53,7 +45,6 @@ slider3:7<0,23,1{1/64 triplet,1/64,1/64 dotted,1/32 triplet,1/32,1/32 dotted,1/1
 slider4:gate=1<0.1,1,0.1>Gate
 slider5:velocity=127<0,127,1>Velocity
 slider6:retrigger=0<0,1,1{off,on}>Retrigger
-slider7:single_note=0<0,1,1{off,on}>Single-note playthrough
 
 in_pin:none
 out_pin:none
@@ -227,8 +218,8 @@ process_midi() > 0 ? (
   generate_steps();
 
   // (re)start sequence if needed
-  step < 0 || num_notes <= single_note || retrigger > 0 ? restart_seq();
-) : num_notes > single_note ? (
+  step < 0 || num_notes <= 1 || retrigger > 0 ? restart_seq();
+) : num_notes > 1 ? (
   // if nothing changed & we're playing, check if we should
   // advance to the next note
   advance_seq();
