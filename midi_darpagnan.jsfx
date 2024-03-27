@@ -43,7 +43,7 @@ slider1:0<0,3,1{Up,Down,Up&Down,Up&Down Alt}>Algorithm
 slider2:1<1,4,1>Octaves
 slider3:7<0,23,1{1/64 Triplet,1/64,1/64 Dotted,1/32 Triplet,1/32,1/32 Dotted,1/16 Triplet,1/16,1/16 Dotted,1/8 Triplet,1/8,1/8 Dotted,1/4 Triplet,1/4,1/4 Dotted,1/2 Triplet,1/2,1/2 Dotted,1/1 Triplet,1/1,1/1 Dotted,2/1 Triplet,2/1,2/1 Dotted}>Resolution
 slider4:gate=1<0.1,1,0.1>Gate
-slider5:velocity=127<0,127,1>Velocity
+slider5:velocity=127<0,127,1>Velocity (0=use played velocity)
 slider6:retrigger=0<0,1,1{No,Yes}>Retrigger on note change
 
 in_pin:none
@@ -52,6 +52,7 @@ out_pin:none
 @init
 notes = 1024; num_notes = 0;
 steps = 2048; num_steps = 0;
+nvmap = 4096;
 note = -1;
 step = -1;
 step_length = 0;
@@ -61,7 +62,7 @@ octaves = 0;
 resolution = 0;
 
 // inserts note into the sorted list of playing notes
-function add_note(n) local(i x tmp) (
+function add_note(n v) local(i x tmp) (
   x = -1;
   i = 0; while(i > -1 && i <= num_notes) (
     x < 0 ? (
@@ -69,6 +70,7 @@ function add_note(n) local(i x tmp) (
         i = -1; // duplicate, don't add
       ) : (i < 1 || notes[i - 1] < n) && (i === num_notes || notes[i] > n) ? (
         x = i;
+        nvmap[n] = v;
       );
     );
 
@@ -145,7 +147,7 @@ function process_midi() local (tr offset msg1 msg2 msg3) (
     );
 
     msg1 == $x90 ? (
-      add_note(msg2) > -1 ? tr = 1;
+      add_note(msg2, msg3) > -1 ? tr = 1;
     ) : msg1 == $x80 ? (
       // forward note off
       midisend(offset, msg1, msg2, msg3);
@@ -157,6 +159,10 @@ function process_midi() local (tr offset msg1 msg2 msg3) (
   );
 
   /* return */ tr;
+);
+
+function get_velocity(n) (
+  /* return */ velocity == 0 ? nvmap[n] : velocity;
 );
 
 function restart_seq() (
@@ -174,7 +180,7 @@ function restart_seq() (
   num_steps > 0 ? (
     step = 0;
     note = steps[step];
-    midisend(0, $x90, note, velocity);
+    midisend(0, $x90, note, get_velocity(note));
   );
 );
 
@@ -188,7 +194,7 @@ function advance_seq() local (p pi s) (
     note > -1 ? midisend(0, $x80, note, 0);
     step = s;
     note = steps[step];
-    midisend(0, $x90, note, velocity);
+    midisend(0, $x90, note, get_velocity(note));
   ) : note > -1 && (p - pi) >= gate ? (
     midisend(0, $x80, note, 0);
     note = -1;
