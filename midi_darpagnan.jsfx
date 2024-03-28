@@ -50,7 +50,7 @@ in_pin:none
 out_pin:none
 
 @init
-notes = 1024; num_notes = 0;
+notes = 1024; num_notes = 0; num_notes_prev = 0;
 steps = 2048; num_steps = 0;
 nvmap = 4096;
 note = -1;
@@ -229,9 +229,11 @@ process_midi() > 0 ? (
   generate_steps();
 
   // (re)start sequence if needed
-  step < 0 || num_notes <= 1 || retrigger > 0 ? restart_seq();
+  step < 0 || num_notes <= 1 || num_notes_prev <= 1 || retrigger > 0 ? restart_seq();
 ) : num_notes > 1 ? (
   // if nothing changed & we're playing, check if we should
   // advance to the next note
   advance_seq();
 );
+
+num_notes_prev = num_notes;
