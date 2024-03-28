@@ -161,8 +161,15 @@ function process_midi() local (tr offset msg1 msg2 msg3) (
   /* return */ tr;
 );
 
-function get_velocity(n) (
-  /* return */ velocity == 0 ? nvmap[n] : velocity;
+function get_velocity(n) local(v st) (
+  velocity == 0 ? (
+    // use played velocity, keeping consistency across octaves
+    st = floor(step / (num_steps / octaves)) * 12;
+    v = nvmap[n-st];
+  ) : (
+    v = velocity;
+  );
+  /* return */ v;
 );
 
 function restart_seq() (
