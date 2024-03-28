@@ -123,10 +123,15 @@ function generate_steps_updown(d) local (ns1 ns2) (
 );
 
 function generate_steps() (
-  algo == 0 ? generate_steps_unidirectional(1, 0) :
-  algo == 1 ? generate_steps_unidirectional(-1, 0) :
-  algo == 2 ? generate_steps_updown(0) :
-  algo == 3 ? generate_steps_updown(1);
+  num_notes <= 1 ? (
+    steps[0] = notes[0];
+    num_steps = num_notes;
+  ) : (
+    algo == 0 ? generate_steps_unidirectional(1, 0) :
+    algo == 1 ? generate_steps_unidirectional(-1, 0) :
+    algo == 2 ? generate_steps_updown(0) :
+    algo == 3 ? generate_steps_updown(1);
+  );
 );
 
 function compute_step_length() local (t, n, f) (
