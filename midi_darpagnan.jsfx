@@ -149,8 +149,6 @@ function process_midi() local (tr offset msg1 msg2 msg3) (
     msg1 == $x90 ? (
       add_note(msg2, msg3) > -1 ? tr = 1;
     ) : msg1 == $x80 ? (
-      // forward note off
-      midisend(offset, msg1, msg2, msg3);
       rem_note(msg2) > -1 ? tr = 1;
     ) : (
       // passthru
