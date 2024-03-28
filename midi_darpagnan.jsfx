@@ -103,17 +103,37 @@ function rem_note(n) local(i x) (
   /* return */ x;
 );
 
-function generate_steps_unidirectional(d o) local (n s nn ns) (
-  nn = num_notes * octaves;
-  ns = nn;
+function generate_octaves(d o) local(s v) (
+  // if generating octaves below, transpose existing steps
+  octaves > 1 && d < 0 ? (
+    s = 0; while (s < num_steps) (
+      v = nvmap[steps[s + o]];
+      steps[s + o] = steps[s + o] + (12 * (octaves - 1));
+      nvmap[steps[s + o]] = v;
+      s += 1;
+    );
+  );
 
-  s = 0; n = d < 0 ? nn - 1 : 0; while (s < ns) (
-    steps[s + o] = notes[n % num_notes] + 12 * floor(n / num_notes);
+  // insert additional transposed steps
+  s = num_steps; while (s < num_steps * octaves) (
+    steps[s + o] = steps[(s % num_steps) + o] + (12 * floor(s / num_steps) * d);
+    nvmap[steps[s + o]] = nvmap[steps[(s % num_steps) + o]];
+    s += 1;
+  );
+
+  /* return */ num_steps = num_steps * octaves;
+);
+
+function generate_steps_unidirectional(d o) local (n s) (
+  num_steps = num_notes;
+
+  s = 0; n = d < 0 ? num_notes - 1 : 0; while (s < num_steps) (
+    steps[s + o] = notes[n % num_notes];
     s += 1;
     n += d;
   );
 
-  /* return */ num_steps = ns;
+  /* return */ num_steps = generate_octaves(d, o);
 );
 
 function generate_steps_updown(d) local (ns1 ns2) (
@@ -164,15 +184,8 @@ function process_midi() local (tr offset msg1 msg2 msg3) (
   /* return */ tr;
 );
 
-function get_velocity(n) local(v st) (
-  velocity == 0 ? (
-    // use played velocity, keeping consistency across octaves
-    st = floor(step / (num_steps / octaves)) * 12;
-    v = nvmap[n-st];
-  ) : (
-    v = velocity;
-  );
-  /* return */ v;
+function get_velocity(n) (
+  /* return */ velocity == 0 ? nvmap[n] : velocity;
 );
 
 function restart_seq() (
