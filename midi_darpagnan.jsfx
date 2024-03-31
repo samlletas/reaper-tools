@@ -44,7 +44,10 @@ slider2:1<1,4,1>Octaves
 slider3:7<0,23,1{1/64 Triplet,1/64,1/64 Dotted,1/32 Triplet,1/32,1/32 Dotted,1/16 Triplet,1/16,1/16 Dotted,1/8 Triplet,1/8,1/8 Dotted,1/4 Triplet,1/4,1/4 Dotted,1/2 Triplet,1/2,1/2 Dotted,1/1 Triplet,1/1,1/1 Dotted,2/1 Triplet,2/1,2/1 Dotted}>Resolution
 slider4:gate=1<0.1,1,0.1>Gate
 slider5:velocity=0<0,127,1>Velocity (0=use played velocity)
-slider6:retrigger=0<0,1,1{No,Yes}>Retrigger on note change
+slider6:lfo_mode=0<0,3,1{Disabled,Sawtooth,Triangle,Square}>Velocity LFO Mode
+slider7:lfo_steps=16<2,30,1>Velocity LFO Steps
+slider8:lfo_amount=0<-127,127,1>Velocity LFO Amount
+slider9:retrigger=0<0,1,1{No,Yes}>Retrigger on note change
 
 in_pin:none
 out_pin:none
@@ -56,6 +59,7 @@ nvmap = 3072;
 svmap = 4096;
 note = -1;
 step = -1;
+step_count = 0;
 step_length = 0;
 t = 0;
 algo = 0;
@@ -189,8 +193,31 @@ function process_midi() local (tr offset msg1 msg2 msg3) (
   /* return */ tr;
 );
 
-function get_velocity(s) (
-  /* return */ velocity == 0 ? svmap[s] : velocity;
+// From https://rosettacode.org/wiki/Map_range
+function map_range(s, a1, a2, b1, b2) (
+  /* return */ b1 + (s - a1) * (b2 - b1) / (a2 - a1);
+);
+
+function get_velocity(s) local(v target v1 v2) (
+  v = velocity > 0 ? velocity : svmap[s];
+
+  lfo_mode > 0 && num_notes > 1 ? (
+    target = min(max(v + lfo_amount, 0), 127);
+
+    // sawtooth wave
+    lfo_mode == 1 ? v = map_range(step_count % lfo_steps, 0, lfo_steps - 1, v, target);
+
+    // triangle wave
+    lfo_mode == 2 ? (
+      floor(step_count / (lfo_steps - 1)) % 2 == 0 ? (v1 = v; v2 = target) : (v1 = target; v2 = v);
+      v = map_range(step_count % (lfo_steps - 1), 0, lfo_steps - 1, v1, v2);
+    );
+
+    // square wave
+    lfo_mode == 3 ? v = floor(step_count / lfo_steps) % 2 == 0 ? v : target;
+  );
+
+  /* return */ v;
 );
 
 function restart_seq() (
@@ -203,6 +230,7 @@ function restart_seq() (
   // restart
   t = 0;
   step = -1;
+  step_count = 0;
 
   // if there is at least one note in the array, start playing it
   num_steps > 0 ? (
@@ -221,6 +249,7 @@ function advance_seq() local (p pi s) (
   s != step ? (
     note > -1 ? midisend(0, $x80, note, 0);
     step = s;
+    step_count += 1;
     note = steps[step];
     midisend(0, $x90, note, get_velocity(step));
   ) : note > -1 && (p - pi) >= gate ? (
@@ -232,8 +261,9 @@ function advance_seq() local (p pi s) (
 @slider
 algo != slider1 ||octaves != slider2 || resolution != slider3 ? (
   // if a main slider changed, reset step state
-  step = -1;
   t = 0;
+  step = -1;
+  step_count = 0;
   algo = slider1;
   octaves = slider2;
   resolution = slider3;
