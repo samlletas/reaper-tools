@@ -245,19 +245,18 @@ function restart_seq() (
   );
 );
 
-function advance_seq() local (p pi s) (
-  p = t / (srate * step_length);
-  pi = floor(p);
-  s = pi % num_steps;
+function advance_seq() local (ts) (
+  ts = srate * step_length;
 
   // if we're supposed to play the next note now let's do so
-  s != step ? (
+  t >= ts ? (
+    t -= ts;
     note > -1 ? midisend(0, $x80, note, 0);
-    step = s;
+    step = (step + 1) % num_steps;
     step_count += 1;
     note = steps[step];
     midisend(0, $x90, note, get_velocity(step));
-  ) : note > -1 && (p - pi) >= gate ? (
+  ) : note > -1 && (t / ts) >= gate ? (
     midisend(0, $x80, note, 0);
     note = -1;
   );
@@ -279,7 +278,7 @@ algo != slider1 ||octaves != slider2 || resolution != slider3 ? (
 compute_step_length();
 
 @sample
-t = (t + 1) % (srate * step_length * num_steps);
+t += 1;
 
 // process midi
 process_midi() > 0 ? (
