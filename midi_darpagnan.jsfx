@@ -68,7 +68,7 @@ octaves = 0;
 resolution = 0;
 
 // inserts note into the sorted list of playing notes
-function add_note(n v) local(i x tmp) (
+function add_note(n, v) local(i, x, tmp) (
   x = -1;
   i = 0; while(i > -1 && i <= num_notes) (
     x < 0 ? (
@@ -94,7 +94,7 @@ function add_note(n v) local(i x tmp) (
 );
 
 // removes note from list of playing notes
-function rem_note(n) local(i x) (
+function rem_note(n) local(i, x) (
   x = -1;
   i = 0; while (i < num_notes) (
     x < 0 && notes[i] == n ? x = i;
@@ -110,12 +110,12 @@ function rem_note(n) local(i x) (
 );
 
 // maps note and velocity to the specified step
-function map_step(s n) (
+function map_step(s, n) (
   steps[s] = notes[n % num_notes];
   svmap[s] = nvmap[notes[n % num_notes]];
 );
 
-function generate_octaves(d o) local(s) (
+function generate_octaves(d, o) local(s) (
   // if generating octaves down, transpose existing steps up
   octaves > 1 && d < 0 ? (
     s = 0; while (s < num_steps) (
@@ -134,7 +134,7 @@ function generate_octaves(d o) local(s) (
   /* return */ num_steps = num_steps * octaves;
 );
 
-function generate_steps_unidirectional(d o) local (n s) (
+function generate_steps_unidirectional(d, o) local(n, s) (
   num_steps = num_notes;
 
   s = 0; n = d < 0 ? num_notes - 1 : 0; while (s < num_steps) (
@@ -146,13 +146,13 @@ function generate_steps_unidirectional(d o) local (n s) (
   /* return */ num_steps = generate_octaves(d, o);
 );
 
-function generate_steps_updown(d) local (ns1 ns2) (
+function generate_steps_updown(d) local(ns1, ns2) (
   ns1 = generate_steps_unidirectional(1, 0) - d;
   ns2 = generate_steps_unidirectional(-1, ns1) - d;
   /* return */ num_steps = ns1 + ns2;
 );
 
-function generate_steps_downup(d) local (ns1 ns2) (
+function generate_steps_downup(d) local(ns1, ns2) (
   ns1 = generate_steps_unidirectional(-1, 0) - d;
   ns2 = generate_steps_unidirectional(1, ns1) - d;
   /* return */ num_steps = ns1 + ns2;
@@ -176,7 +176,7 @@ function generate_steps() (
   );
 );
 
-function compute_step_length() local (t, n, f) (
+function compute_step_length() local(t, n, f) (
   t = 60 / tempo;
   n = 2 ^ (floor(resolution / 3) - 4);
   f = resolution % 3;
@@ -184,7 +184,7 @@ function compute_step_length() local (t, n, f) (
   step_length = t * n * f;
 );
 
-function process_midi() local (tr offset msg1 msg2 msg3) (
+function process_midi() local(tr, offset, msg1, msg2, msg3) (
   tr = 0;
 
   while (midirecv(offset, msg1, msg2, msg3)) (
@@ -211,7 +211,7 @@ function map_range(s, a1, a2, b1, b2) (
   /* return */ b1 + (s - a1) * (b2 - b1) / (a2 - a1);
 );
 
-function get_velocity(s) local(v target v1 v2) (
+function get_velocity(s) local(v, target, v1, v2) (
   v = velocity > 0 ? velocity : svmap[s];
 
   lfo_mode > 0 && num_notes > single_note ? (
@@ -253,7 +253,7 @@ function restart_seq() (
   );
 );
 
-function advance_seq() local (ts) (
+function advance_seq() local(ts) (
   ts = srate * step_length;
 
   // if we're supposed to play the next note now let's do so
