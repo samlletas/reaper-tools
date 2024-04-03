@@ -41,7 +41,7 @@ about:
 
 slider1:0<0,5,1{Up,Down,Up/Down,Up/Down+,Down/Up,Down/Up+}>Algorithm
 slider2:1<1,4,1>Octaves
-slider3:7<0,23,1{1/64 Triplet,1/64,1/64 Dotted,1/32 Triplet,1/32,1/32 Dotted,1/16 Triplet,1/16,1/16 Dotted,1/8 Triplet,1/8,1/8 Dotted,1/4 Triplet,1/4,1/4 Dotted,1/2 Triplet,1/2,1/2 Dotted,1/1 Triplet,1/1,1/1 Dotted,2/1 Triplet,2/1,2/1 Dotted}>Resolution
+slider3:resolution=7<0,23,1{1/64 Triplet,1/64,1/64 Dotted,1/32 Triplet,1/32,1/32 Dotted,1/16 Triplet,1/16,1/16 Dotted,1/8 Triplet,1/8,1/8 Dotted,1/4 Triplet,1/4,1/4 Dotted,1/2 Triplet,1/2,1/2 Dotted,1/1 Triplet,1/1,1/1 Dotted,2/1 Triplet,2/1,2/1 Dotted}>Resolution
 slider4:gate=1<0.1,1,0.1>Gate
 slider5:velocity=0<0,127,1>Velocity (0=use played velocity)
 slider6:lfo_mode=0<0,3,1{Disabled,Sawtooth,Triangle,Square}>Velocity LFO Mode
@@ -65,7 +65,6 @@ step_length = 0;
 t = 0;
 algo = 0;
 octaves = 0;
-resolution = 0;
 
 // inserts note into the sorted list of playing notes
 function add_note(n, v) local(i, x, tmp) (
@@ -271,14 +270,13 @@ function advance_seq() local(ts) (
 );
 
 @slider
-algo != slider1 ||octaves != slider2 || resolution != slider3 ? (
+algo != slider1 ||octaves != slider2 ? (
   // if a main slider changed, reset step state
   t = 0;
   step = -1;
   step_count = 0;
   algo = slider1;
   octaves = slider2;
-  resolution = slider3;
   generate_steps();
 );
 
