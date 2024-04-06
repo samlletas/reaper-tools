@@ -54,10 +54,12 @@ in_pin:none
 out_pin:none
 
 @init
-notes = 1024; num_notes = 0; num_notes_prev = 0;
-steps = 2048; num_steps = 0;
-nvmap = 3072;
-svmap = 4096;
+notes = 0000; num_notes = 0; num_notes_prev = 0;
+pool  = 1000; pool_size = 0;
+steps = 2000; num_steps = 0;
+nvmap = 3000;
+pvmap = 4000;
+svmap = 5000;
 note = -1;
 step = -1;
 step_count = 0;
@@ -110,39 +112,32 @@ function rem_note(n) local(i, x) (
 
 // maps note and velocity to the specified step
 function map_step(s, n) (
-  steps[s] = notes[n % num_notes];
-  svmap[s] = nvmap[notes[n % num_notes]];
+  steps[s] = pool[n % pool_size];
+  svmap[s] = pvmap[n % pool_size];
 );
 
-function generate_octaves(d, o) local(s) (
-  // if generating octaves down, transpose existing steps up
-  octaves > 1 && d < 0 ? (
-    s = 0; while (s < num_steps) (
-      steps[s + o] = steps[s + o] + (12 * (octaves - 1));
-      s += 1;
-    );
+function generate_notes_pool() local(n) (
+  pool_size = num_notes * octaves; 
+
+  n = 0; while (n < pool_size) (
+    pool[n] = notes[n % num_notes] + (12 * floor(n / num_notes));
+    pvmap[n] = nvmap[notes[n % num_notes]];
+    n += 1;
   );
 
-  // insert additional transposed steps
-  s = num_steps; while (s < num_steps * octaves) (
-    steps[s + o] = steps[(s % num_steps) + o] + (12 * floor(s / num_steps) * d);
-    svmap[s + o] = svmap[(s % num_steps) + o];
-    s += 1;
-  );
-
-  /* return */ num_steps = num_steps * octaves;
+  /* return */ pool_size;
 );
 
 function generate_steps_unidirectional(d, o) local(n, s) (
-  num_steps = num_notes;
+  num_steps = generate_notes_pool();
 
-  s = 0; n = d < 0 ? num_notes - 1 : 0; while (s < num_steps) (
+  s = 0; n = d < 0 ? pool_size - 1 : 0; while (s < num_steps) (
     map_step(s + o, n);
     s += 1;
     n += d;
   );
 
-  /* return */ num_steps = generate_octaves(d, o);
+  /* return */ num_steps;
 );
 
 function generate_steps_updown(d) local(ns1, ns2) (
@@ -158,7 +153,7 @@ function generate_steps_downup(d) local(ns1, ns2) (
 );
 
 function generate_steps_join(o) local(n, s) (
-  num_steps = num_notes;
+  num_steps = generate_notes_pool();
 
   s = 0; n = 0; while (s < num_steps) (
     map_step(s + o, n);
@@ -166,39 +161,32 @@ function generate_steps_join(o) local(n, s) (
     n += (s % 2 == 0) ? s - num_steps : num_steps - s;
   );
 
-  /* return */ num_steps = generate_octaves(1, o);
+  /* return */ num_steps;
 );
 
 function generate_steps_spread(o) local(n, s) (
-  num_steps = num_notes;
+  num_steps = generate_notes_pool();
 
-  s = 0; n = floor(num_notes / 2); while (s < num_steps) (
+  s = 0; n = floor(pool_size / 2); while (s < num_steps) (
     map_step(s + o, n);
     s += 1;
     n += ((num_steps - s) % 2 == 0) ? s : -s;
   );
 
-  /* return */ num_steps = generate_octaves(1, o);
+  /* return */ num_steps;
 );
 
 function generate_steps() (
-  num_notes == 0 ? (
-    num_steps = 0;
-  ):
-  num_notes == 1 ? (
-    map_step(0, 0);
-    map_step(1, 0);
-    num_steps = 2 - single_note;
-  ) : (
-    algo == 0 ? generate_steps_unidirectional(1, 0) :
-    algo == 1 ? generate_steps_unidirectional(-1, 0) :
-    algo == 2 ? generate_steps_updown(1) :
-    algo == 3 ? generate_steps_updown(0) :
-    algo == 4 ? generate_steps_downup(1) :
-    algo == 5 ? generate_steps_downup(0) :
-    algo == 6 ? generate_steps_join(0) :
-    algo == 7 ? generate_steps_spread(0);
-  );
+  num_notes <= 0 ? (num_steps = 0; pool_size = 0) :
+  num_notes == 1 ? generate_steps_unidirectional(1, 0) :
+  algo == 0 ? generate_steps_unidirectional(1, 0) :
+  algo == 1 ? generate_steps_unidirectional(-1, 0) :
+  algo == 2 ? generate_steps_updown(1) :
+  algo == 3 ? generate_steps_updown(0) :
+  algo == 4 ? generate_steps_downup(1) :
+  algo == 5 ? generate_steps_downup(0) :
+  algo == 6 ? generate_steps_join(0) :
+  algo == 7 ? generate_steps_spread(0);
 );
 
 function compute_step_length() local(t, n, f) (
