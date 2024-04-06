@@ -64,7 +64,7 @@ note = -1;
 step = -1;
 step_count = 0;
 step_length = 0;
-t = 0;
+time = 0;
 algo = 0;
 octaves = 0;
 
@@ -254,7 +254,7 @@ function restart_seq() (
   );
 
   // restart
-  t = 0;
+  time = 0;
   step = -1;
   step_count = 0;
 
@@ -266,19 +266,19 @@ function restart_seq() (
   );
 );
 
-function advance_seq() local(ts) (
-  t += 1;
-  ts = srate * step_length;
+function advance_seq() local(timestep) (
+  time += 1;
+  timestep = srate * step_length;
 
   // if we're supposed to play the next note now let's do so
-  t >= ts ? (
-    t -= ts;
+  time >= timestep ? (
+    time -= timestep;
     note > -1 ? midisend(0, $x80, note, 0);
     step = (step + 1) % num_steps;
     step_count += 1;
     note = steps[step];
     midisend(0, $x90, note, get_velocity(step));
-  ) : note > -1 && (t / ts) >= gate ? (
+  ) : note > -1 && (time / timestep) >= gate ? (
     midisend(0, $x80, note, 0);
     note = -1;
   );
@@ -286,11 +286,10 @@ function advance_seq() local(ts) (
 
 @slider
 algo != slider1 ||octaves != slider2 ? (
-  // if a main slider changed, reset step state
-  step = -1;
-  step_count = 0;
   algo = slider1;
   octaves = slider2;
+  step = -1;
+  step_count = 0;
   generate_steps();
 );
 
