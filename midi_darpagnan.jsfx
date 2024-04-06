@@ -286,7 +286,6 @@ function advance_seq() local(ts) (
 @slider
 algo != slider1 ||octaves != slider2 ? (
   // if a main slider changed, reset step state
-  t = 0;
   step = -1;
   step_count = 0;
   algo = slider1;
