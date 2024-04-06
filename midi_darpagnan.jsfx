@@ -267,6 +267,7 @@ function restart_seq() (
 );
 
 function advance_seq() local(ts) (
+  t += 1;
   ts = srate * step_length;
 
   // if we're supposed to play the next note now let's do so
@@ -297,8 +298,6 @@ algo != slider1 ||octaves != slider2 ? (
 compute_step_length();
 
 @sample
-t += 1;
-
 // process midi
 process_midi() > 0 ? (
   // if something changed, regenerate steps
