@@ -39,7 +39,7 @@ about:
      or only when there's a period of silence (even if it's only a millisecond long).
 
 
-slider1:0<0,7,1{Up,Down,Up/Down,Up/Down+,Down/Up,Down/Up+,Join,Spread}>Algorithm
+slider1:0<0,9,1{Up,Down,Up/Down,Up/Down+,Down/Up,Down/Up+,Join,Spread,Join/Spread,Spread/Join}>Algorithm
 slider2:1<1,4,1>Octaves
 slider3:resolution=7<0,23,1{1/64 Triplet,1/64,1/64 Dotted,1/32 Triplet,1/32,1/32 Dotted,1/16 Triplet,1/16,1/16 Dotted,1/8 Triplet,1/8,1/8 Dotted,1/4 Triplet,1/4,1/4 Dotted,1/2 Triplet,1/2,1/2 Dotted,1/1 Triplet,1/1,1/1 Dotted,2/1 Triplet,2/1,2/1 Dotted}>Resolution
 slider4:gate=1<0.1,1,0.1>Gate
@@ -176,6 +176,18 @@ function generate_steps_spread(o) local(n, s) (
   /* return */ num_steps;
 );
 
+function generate_steps_joinspread() local(ns1, ns2) (
+  ns1 = generate_steps_join(0) - 1;
+  ns2 = generate_steps_spread(ns1) - 1;
+  /* return */ num_steps = ns1 + ns2;
+);
+
+function generate_steps_spreadjoin() local(ns1, ns2) (
+  ns1 = generate_steps_spread(0) - 1;
+  ns2 = generate_steps_join(ns1) - 1;
+  /* return */ num_steps = ns1 + ns2;
+);
+
 function generate_steps() (
   num_notes <= 0 ? (num_steps = 0; pool_size = 0) :
   num_notes == 1 ? generate_steps_unidirectional(1, 0) :
@@ -186,7 +198,9 @@ function generate_steps() (
   algo == 4 ? generate_steps_downup(1) :
   algo == 5 ? generate_steps_downup(0) :
   algo == 6 ? generate_steps_join(0) :
-  algo == 7 ? generate_steps_spread(0);
+  algo == 7 ? generate_steps_spread(0) :
+  algo == 8 ? generate_steps_joinspread() :
+  algo == 9 ? generate_steps_spreadjoin();
 );
 
 function compute_step_length() local(t, n, f) (
