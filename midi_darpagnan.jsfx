@@ -129,7 +129,7 @@ function generate_notes_pool() local(n) (
 );
 
 function generate_steps_unidirectional(d, o) local(n, s) (
-  num_steps = generate_notes_pool();
+  num_steps = pool_size;
 
   s = 0; n = d < 0 ? pool_size - 1 : 0; while (s < num_steps) (
     map_step(s + o, n);
@@ -153,7 +153,7 @@ function generate_steps_downup(d) local(ns1, ns2) (
 );
 
 function generate_steps_join(o) local(n, s) (
-  num_steps = generate_notes_pool();
+  num_steps = pool_size;
 
   s = 0; n = 0; while (s < num_steps) (
     map_step(s + o, n);
@@ -165,7 +165,7 @@ function generate_steps_join(o) local(n, s) (
 );
 
 function generate_steps_spread(o) local(n, s) (
-  num_steps = generate_notes_pool();
+  num_steps = pool_size;
 
   s = 0; n = floor(pool_size / 2); while (s < num_steps) (
     map_step(s + o, n);
@@ -189,8 +189,7 @@ function generate_steps_spreadjoin() local(ns1, ns2) (
 );
 
 function generate_steps_stairs(d, o) local(n, s) (
-  num_steps = generate_notes_pool();
-  num_steps += max(num_steps - 4, 0);
+  num_steps = pool_size + max(pool_size - 4, 0);
 
   s = 0; n = d < 0 ? pool_size - 1 : 0; while (s < num_steps) (
     map_step(s + o, n);
@@ -215,21 +214,26 @@ function generate_steps_stairs_downup() local(ns1, ns2) (
 );
 
 function generate_steps() (
-  num_notes <= 0 ? (num_steps = 0; pool_size = 0) :
-  algo == 0 ? generate_steps_unidirectional(1, 0) :
-  algo == 1 ? generate_steps_unidirectional(-1, 0) :
-  algo == 2 ? generate_steps_updown(1) :
-  algo == 3 ? generate_steps_updown(0) :
-  algo == 4 ? generate_steps_downup(1) :
-  algo == 5 ? generate_steps_downup(0) :
-  algo == 6 ? generate_steps_join(0) :
-  algo == 7 ? generate_steps_spread(0) :
-  algo == 8 ? generate_steps_joinspread() :
-  algo == 9 ? generate_steps_spreadjoin() :
-  algo == 10 ? generate_steps_stairs(1, 0) :
-  algo == 11 ? generate_steps_stairs(-1, 0) :
-  algo == 12 ? generate_steps_stairs_updown() :
-  algo == 13 ? generate_steps_stairs_downup();
+  num_notes <= 0 ? (
+    num_steps = 0;
+    pool_size = 0;
+  ) : (
+    generate_notes_pool();
+    algo == 0 ? generate_steps_unidirectional(1, 0) :
+    algo == 1 ? generate_steps_unidirectional(-1, 0) :
+    algo == 2 ? generate_steps_updown(1) :
+    algo == 3 ? generate_steps_updown(0) :
+    algo == 4 ? generate_steps_downup(1) :
+    algo == 5 ? generate_steps_downup(0) :
+    algo == 6 ? generate_steps_join(0) :
+    algo == 7 ? generate_steps_spread(0) :
+    algo == 8 ? generate_steps_joinspread() :
+    algo == 9 ? generate_steps_spreadjoin() :
+    algo == 10 ? generate_steps_stairs(1, 0) :
+    algo == 11 ? generate_steps_stairs(-1, 0) :
+    algo == 12 ? generate_steps_stairs_updown() :
+    algo == 13 ? generate_steps_stairs_downup();
+  );
 );
 
 function compute_step_length() local(t, n, f) (
