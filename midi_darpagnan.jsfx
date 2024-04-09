@@ -216,7 +216,6 @@ function generate_steps_stairs_downup() local(ns1, ns2) (
 
 function generate_steps() (
   num_notes <= 0 ? (num_steps = 0; pool_size = 0) :
-  num_notes == 1 ? generate_steps_unidirectional(1, 0) :
   algo == 0 ? generate_steps_unidirectional(1, 0) :
   algo == 1 ? generate_steps_unidirectional(-1, 0) :
   algo == 2 ? generate_steps_updown(1) :
