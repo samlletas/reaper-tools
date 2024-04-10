@@ -254,7 +254,9 @@ function generate_steps() (
     pool_size = 0;
   ) : (
     generate_notes_pool();
-    algo == LINEAR || pool_size <= 2 ? (
+    num_notes <= single_note || pool_size == 1 ? (
+      generate_steps_linear(1, 0);
+    ) : algo == LINEAR || pool_size == 2 ? (
       direction == UP ? generate_steps_linear(1, 0) :
       direction == DOWN ? generate_steps_linear(-1, 0) :
       direction == UP_DOWN ? generate_steps_linear_cyclic(1, 1) :
