@@ -164,7 +164,7 @@ function generate_steps_linear_cyclic(d, trim) local(ns1, ns2) (
 );
 
 function generate_steps_zigzag(d, o) local(n, s) (
-  num_steps = pool_size + max(pool_size - 4, 0);
+  num_steps = pool_size + abs(pool_size - 4);
 
   s = 0; n = d < 0 ? pool_size - 1 : 0; while (s < num_steps) (
     map_step(s + o, n);
