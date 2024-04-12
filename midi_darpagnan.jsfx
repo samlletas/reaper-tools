@@ -331,7 +331,7 @@ function map_range(s, a1, a2, b1, b2) (
 );
 
 function get_velocity(s) local(v, target, v1, v2) (
-  v = velocity > 0 ? velocity : svmap[s];
+  v = (velocity > 0 && num_notes > single_note) ? velocity : svmap[s];
 
   lfo_amount != 0 && num_notes > single_note ? (
     target = min(max(v + lfo_amount, 0), 127);
