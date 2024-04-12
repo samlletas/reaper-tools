@@ -47,9 +47,10 @@ slider5:gate=1<0.1,1,0.1>Gate
 slider6:velocity=0<0,127,1>Velocity (0=use played velocity)
 slider7:lfo_wave=0<0,2,1{Sawtooth,Triangle,Square}>Velocity LFO Wave
 slider8:lfo_steps=8<2,32,1>Velocity LFO Steps
-slider9:lfo_amount=0<-127,127,1>Velocity LFO Amount
-slider10:retrigger=0<0,1,1{Rest,Any Note Change}>Retrigger On
-slider11:single_note=0<0,1,1{No,Yes}>Single-Note Playthrough
+slider9:lfo_phase=0<0,32,1>Velocity LFO Phase
+slider10:lfo_amount=0<-127,127,1>Velocity LFO Amount
+slider11:retrigger=0<0,1,1{Rest,Any Note Change}>Retrigger On
+slider12:single_note=0<0,1,1{No,Yes}>Single-Note Playthrough
 
 in_pin:none
 out_pin:none
@@ -330,23 +331,24 @@ function map_range(s, a1, a2, b1, b2) (
   /* return */ b1 + (s - a1) * (b2 - b1) / (a2 - a1);
 );
 
-function get_velocity(s) local(v, target, v1, v2) (
+function get_velocity(s) local(v, target, v1, v2, step_pos) (
   v = (velocity > 0 && num_notes > single_note) ? velocity : svmap[s];
 
   lfo_amount != 0 && num_notes > single_note ? (
     target = min(max(v + lfo_amount, 0), 127);
+    step_pos = step_count + lfo_phase;
 
     // sawtooth wave
-    lfo_wave == 0 ? v = map_range(step_count % lfo_steps, 0, lfo_steps - 1, v, target);
+    lfo_wave == 0 ? v = map_range(step_pos % lfo_steps, 0, lfo_steps - 1, v, target);
 
     // triangle wave
     lfo_wave == 1 ? (
-      floor(step_count / (lfo_steps - 1)) % 2 == 0 ? (v1 = v; v2 = target) : (v1 = target; v2 = v);
-      v = map_range(step_count % (lfo_steps - 1), 0, lfo_steps - 1, v1, v2);
+      floor(step_pos / (lfo_steps - 1)) % 2 == 0 ? (v1 = v; v2 = target) : (v1 = target; v2 = v);
+      v = map_range(step_pos % (lfo_steps - 1), 0, lfo_steps - 1, v1, v2);
     );
 
     // square wave
-    lfo_wave == 2 ? v = floor(step_count / lfo_steps) % 2 == 0 ? v : target;
+    lfo_wave == 2 ? v = floor(step_pos / lfo_steps) % 2 == 0 ? v : target;
   );
 
   /* return */ v;
