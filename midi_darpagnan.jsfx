@@ -3,40 +3,15 @@ author: jahudka
 version: 1.0
 changelog: Fresh out of the oven
 about:
-  # d'Arpagnan Arpeggiator
+  # MIDI d'Arpagnan
 
-  I created d'Arpagnan because I wanted a simple-to-use, _predictable_,
-  and still powerful arpeggiator, but I couldn't find anything that
-  works and does what I need. So I rolled my own. Please beware that
-  I put this together in an afternoon and it works _for me_ - it may
-  not work for you, or you might not like the way it does.
+  This is a modified version with changes implemented by samlletas,
+  the original plugin can be downloaded from the following repo:
+  https://github.com/jahudka/reaper-consolefx
 
-  It doesn't have a fancy step sequencer. It just takes whatever you play
-  and makes a sequence out of it using a deterministic algorithm with
-  only a couple of parameters. You can play it live. You can use it
-  in the studio. You can print out the source code and make an origami.
-  Your imagination is the limit.
-
-  ## Controls
-
-   - `Step size` is pretty self-explanatory, I think.
-   - `Algorithm` offers four choices:
-      - `up` plays the notes from the lowest to the highest,
-      - `down` does the mirror opposite,
-      - `up&down` does one `up` and then one `down` (e.g. `cegCCgeccegCCgec...`), and
-      - `up&down alt` does the same, except it deduplicates
-        the last note of each cycle, so for example `cegCgecegCgec...`.
-   - `Octaves` is used to add octaves above the played notes. It does exactly
-     the same thing as if you added transposed copies of all the notes you play.
-   - `Note length` can be used to make the emitted notes shorter.
-     By default the notes are the full specified `Step size` long, but
-     at 1/32 triplets at 180bpm stuff gets crazy sometimes and notes could
-     overlap, and overlapping notes could cause hanging tones. Bringing
-     note length back to 90% can be usually compensated by a slightly longer
-     decay on the synth to sound the same while avoiding this issue.
-   - `Retrigger` allows you to choose whether to restart the sequence
-     from the beginning when any one note is changed (ie. added or removed),
-     or only when there's a period of silence (even if it's only a millisecond long).
+  I added more patterns with several possible directions each, also 
+  removed the backtrack controls since I didn't use them that much.
+  Velocity is no longer hardcoded and it can be modulated via a LFO.
 
 
 slider1:0<0,4,1{Linear,ZigZag,SwayLow,SwayHigh,Spiral}>Algorithm
