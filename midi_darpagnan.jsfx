@@ -61,6 +61,11 @@ DOWN_UP = 3;
 UP_DOWN_REPEAT = 4;
 DOWN_UP_REPEAT = 5;
 
+// lfo wave constants
+SAWTOOTH = 0;
+TRIANGLE = 1;
+SQUARE = 2;
+
 // inserts note into the sorted list of playing notes
 function add_note(n, v) local(i, x, tmp) (
   x = -1;
@@ -313,17 +318,14 @@ function get_velocity(s) local(v, target, v1, v2, step_pos) (
     target = min(max(v + lfo_amount, 0), 127);
     step_pos = step_count + lfo_phase;
 
-    // sawtooth wave
-    lfo_wave == 0 ? v = map_range(step_pos % lfo_steps, 0, lfo_steps - 1, v, target);
-
-    // triangle wave
-    lfo_wave == 1 ? (
+    lfo_wave == SAWTOOTH ? (
+      v = map_range(step_pos % lfo_steps, 0, lfo_steps - 1, v, target);
+    ) : lfo_wave == TRIANGLE ? (
       floor(step_pos / (lfo_steps - 1)) % 2 == 0 ? (v1 = v; v2 = target) : (v1 = target; v2 = v);
       v = map_range(step_pos % (lfo_steps - 1), 0, lfo_steps - 1, v1, v2);
+    ) : lfo_wave == SQUARE ? (
+      v = floor(step_pos / lfo_steps) % 2 == 0 ? v : target;
     );
-
-    // square wave
-    lfo_wave == 2 ? v = floor(step_pos / lfo_steps) % 2 == 0 ? v : target;
   );
 
   /* return */ v;
