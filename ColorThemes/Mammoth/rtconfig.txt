@@ -61,9 +61,8 @@ endmacro
 
 ; macro for the color of track labels, with tweaked custom color inheritance if a custom color is too dark
 macro trackLabelColor element
-	; **MODIFIED TO REMOVE TEXT COLORING**
-	; set element               	?recarm [255 100 0] ?track_selected [255 255 255] ?trackcolor_valid  luma{0}<120 + custom_col [80 80 80] custom_col [168 172 172]
-	set element 	?track_selected [255 255 255] [160 160 160]
+	; **MODIFIED TO APPLY TEXT COLORING**
+	set element   ?trackcolor_valid  luma{0}<120 + custom_col [80 80 80] custom_col [168 172 172]
 endmacro
 
 ; ---------------------------------------------------------------
