@@ -228,7 +228,7 @@ macro calcTcpSecs scale
 	set fxparm_sec 100
 
 	; Maximum number of columns when not enough space (default: 2)
-	set fxparm_num_columns 2
+	set fxparm_num_columns 1
 
 	; FX height
 	set fx_height 18
