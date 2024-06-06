@@ -9,7 +9,7 @@ root = true
 indent_style = space
 charset = utf-8
 
-# JSFX scripts.
-[*.{jsfx,jsfx-inc}]
+# Scripts.
+[*.{lua,jsfx,jsfx-inc}]
 indent_style = space
 indent_size = 2

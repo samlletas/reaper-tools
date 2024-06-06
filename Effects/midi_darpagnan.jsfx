@@ -13,7 +13,6 @@ about:
   removed the backtrack controls since I didn't use them that much.
   Velocity is no longer hardcoded and it can be modulated via a LFO.
 
-
 slider1:0<0,4,1{Linear,ZigZag,SwayLow,SwayHigh,Spiral}>Algorithm
 slider2:0<0,5,1{Up,Down,Up-Down,Down-Up,Up-Down (Repeat),Down-Up (Repeat)}>Direction
 slider3:1<1,4,1>Octaves
@@ -69,7 +68,7 @@ SQUARE = 2;
 // inserts note into the sorted list of playing notes
 function add_note(n, v) local(i, x, tmp) (
   x = -1;
-  i = 0; while(i > -1 && i <= num_notes) (
+  i = 0; while (i > -1 && i <= num_notes) (
     x < 0 ? (
       notes[i] == n ? (
         i = -1; // duplicate, don't add
