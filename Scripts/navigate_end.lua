@@ -4,7 +4,7 @@
 local loopStart, loopEnd = reaper.GetSet_LoopTimeRange(false, false, 0, 0, false)
 local midiEditor = reaper.MIDIEditor_GetActive()
 
-local function runOnMidiEditor(midiEditor, isLoopSelected)
+local function runOnMidiEditor(isLoopSelected)
   if isLoopSelected then
     reaper.MIDIEditor_OnCommand(midiEditor, 40439) -- [MIDI Editor] Move cursor to end of loop
   else
@@ -21,7 +21,7 @@ local function runOnMain(isLoopSelected)
 end
 
 if midiEditor then
-  runOnMidiEditor(midiEditor, loopStart ~= loopEnd)
+  runOnMidiEditor(loopStart ~= loopEnd)
 else
   runOnMain(loopStart ~= loopEnd)
 end
