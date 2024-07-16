@@ -11,14 +11,15 @@ it and copy the files into your Reaper folder.
 ### MIDI d'Arpagnan
 
 Modified version of Jahudka's [d'Arpagnan Arpeggiator](https://github.com/jahudka/reaper-consolefx).
-I added more patterns with several possible directions each, also removed the backtrack controls 
+I added more patterns with several possible directions each, also removed the backtrack controls
 since I didn't use them that much. Velocity is no longer hardcoded and it can be modulated via a LFO.
 
 ![midi_darpagnan](https://github.com/samlletas/jsfx/assets/7089504/5a611bbe-d116-4dce-b67c-cc633018c41a)
 
 ## Scripts
 
-- **record_once:** Records a single take and plays the recorded input in the next loop. The script works 
+- **play_selection:** Plays time selection without moving the edit cursor.
+- **record_once:** Records a single take and plays the recorded input in the next loop. The script works
 best when enabling `Preferences -> Audio -> Loop recording -> "In loop recording, discard incomplete take if at least one loop was recorded"`
 - **navigate_home:** Go to start of loop/item/project.
 - **navigate_end:** Go to end of loop/item/project.
