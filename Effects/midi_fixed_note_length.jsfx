@@ -1,13 +1,16 @@
-desc:MIDI Fixed Note Length v0.3
+// MIDI Fixed Note Length by mwe
+// https://forum.cockos.com/showpost.php?p=1220610&postcount=13
+
+desc:MIDI Fixed Note Length
 
 in_pin:none
 out_pin:none
 
 slider1:0<0,1,{Note,Time}>Mode
-slider4:2<0,6,{Whole,1/2,1/4,1/8,1/16,1/32}>Note Length
-slider5:100<50,200,1>Note Percentage
-slider7:0<0,2000,0.1>Time (ms)
-slider64:1<1,16,1>MIDI Channel 
+slider2:2<0,6,{Whole,1/2,1/4,1/8,1/16,1/32}>Note Length
+slider3:100<50,200,1>Note Percentage
+slider4:0<0,2000,0.1>Time (ms)
+slider5:1<1,16,1>MIDI Channel
 
 @init     //////////////////////////////
 
@@ -24,12 +27,12 @@ last_msg = 0;
 @slider   //////////////////////////////
 
 mode = slider1;
-note_length = 1 / (2 ^ slider4);
-note_pct = min(max(slider5, 50), 200) * 0.01;
+note_length = 1 / (2 ^ slider2);
+note_pct = min(max(slider3, 50), 200) * 0.01;
 note_x = note_length * note_pct;
-time_x = (min(max(slider7, 0), 2000) * 0.001);
-our_channel = min(max(slider64 - 1, 0), 15) | 0;
-   
+time_x = (min(max(slider4, 0), 2000) * 0.001);
+our_channel = min(max(slider5 - 1, 0), 15) | 0;
+
 @block    //////////////////////////////
 
 !mode ? (
@@ -45,11 +48,11 @@ while (
     channel = msg1 & $x0F;
     note = msg23 & $x7F;
     velocity = msg23 >> 8;
-    
+
     channel == our_channel ? (
       status == statNoteOn && velocity > 0 ? (
         note_active[note] == 0 ? (
-          midisend(offset, msg1, msg23);       
+          midisend(offset, msg1, msg23);
           message[last_msg] = offset + delay;
           message[last_msg + 1] = note;
           note_active[message[last_msg + 1]] = 1;
@@ -57,7 +60,7 @@ while (
         );
       ):(  // Not a note event, send message on
         status != statNoteOff ? midisend(offset, msg1, msg23);
-      );  
+      );
     ):(  // Not our channel, send message on
       midisend(offset, msg1, msg23);
     );
@@ -68,7 +71,7 @@ while (
 i = first_msg;
 while (
   i < last_msg ? (  // Send Note Off messages for the current block
-    message[first_msg] < samplesblock ? ( 
+    message[first_msg] < samplesblock ? (
       midisend(message[first_msg], statNoteOff + our_channel, (message[first_msg + 1] | 0 << 8));
       note_active[message[first_msg + 1]] = 0;
       first_msg += 2;
@@ -77,7 +80,7 @@ while (
       message[i] -= samplesblock;
       i += 2;
     );
-  1;  
+  1;
   );
 );
 
@@ -85,4 +88,4 @@ while (
 last_msg > 0 && first_msg == last_msg ? (
   memset(message, 0, last_msg);
   first_msg = last_msg = 0;
-); 
+);
