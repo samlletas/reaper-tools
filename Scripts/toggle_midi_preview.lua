@@ -12,15 +12,15 @@ local PLAYING <const> = 1
 local MIDI_SECTION <const> = 32060
 local TOGGLE_CMD <const> = 40041
 
-function main_loop()
+local function run()
   local state = reaper.GetPlayState()
   local toggle = reaper.GetToggleCommandStateEx(MIDI_SECTION, TOGGLE_CMD)
 
   if (state & PLAYING > 0 and toggle > 0) or (state & PLAYING == 0 and toggle == 0) then
-    reaper.MIDIEditor_LastFocused_OnCommand(TOGGLE_CMD, 0)
+    reaper.MIDIEditor_LastFocused_OnCommand(TOGGLE_CMD, false)
   end
 
-  reaper.defer(main_loop)
+  reaper.defer(run)
 end
 
-reaper.defer(main_loop)
+reaper.defer(run)
