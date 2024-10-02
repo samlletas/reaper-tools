@@ -18,11 +18,6 @@ since I didn't use them that much. Velocity is no longer hardcoded and it can be
 
 ## Scripts
 
-- **play_selection:** Plays time selection without moving the edit cursor.
-- **record_once:** Records a single take and plays the recorded input in the next loop. The script works
-best when enabling `Preferences -> Audio -> Loop recording -> "In loop recording, discard incomplete take if at least one loop was recorded"`
-- **navigate_home:** Go to start of loop/item/project.
-- **navigate_end:** Go to end of loop/item/project.
 - **toggle_midi_preview:** Toggle MIDI preview on play/stop (modified version of cfillion's [script](https://github.com/ReaTeam/ReaScripts/blob/master/MIDI%20Editor/cfillion_Toggle%20MIDI%20preview%20on%20transport%20change.lua)).
 
 ## Development & Contributing
