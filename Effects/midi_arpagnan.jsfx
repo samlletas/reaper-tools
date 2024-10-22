@@ -1,17 +1,8 @@
-desc:MIDI d'Arpagnan
-author: jahudka
+desc: MIDI Arpagnan
+author: jahudka (modified by samlletas)
 version: 1.0
-changelog: Fresh out of the oven
-about:
-  # MIDI d'Arpagnan
-
-  This is a modified version with changes implemented by samlletas,
-  the original plugin can be downloaded from the following repo:
-  https://github.com/jahudka/reaper-consolefx
-
-  I added more patterns with several possible directions each, also 
-  removed the backtrack controls since I didn't use them that much.
-  Velocity is no longer hardcoded and it can be modulated via a LFO.
+changelog: Added more patterns and velocity modulation, removed backtrack sliders
+about: Modified version of dArpagnan Arpeggiator (https://github.com/jahudka/reaper-consolefx)
 
 slider1:0<0,4,1{Linear,ZigZag,SwayLow,SwayHigh,Spiral}>Algorithm
 slider2:0<0,5,1{Up,Down,Up-Down,Down-Up,Up-Down (Repeat),Down-Up (Repeat)}>Direction
@@ -114,7 +105,7 @@ function map_step(s, n) (
 );
 
 function generate_notes_pool() local(n) (
-  pool_size = num_notes * octaves; 
+  pool_size = num_notes * octaves;
 
   n = 0; while (n < pool_size) (
     pool[n] = notes[n % num_notes] + (12 * floor(n / num_notes));
