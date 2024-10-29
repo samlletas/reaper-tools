@@ -12,8 +12,8 @@ slider5:gate=1<0.1,1,0.1>Gate
 slider6:velocity=0<0,127,1>Velocity (0=use played velocity)
 slider7:lfo_depth=0<-127,127,1>Velocity LFO Depth
 slider8:lfo_wave=0<0,2,1{Sawtooth,Triangle,Square}>Velocity LFO Wave
-slider9:lfo_steps=8<2,32,1>Velocity LFO Steps
-slider10:lfo_phase=0<0,32,1>Velocity LFO Phase
+slider9:lfo_steps=16<2,16,1>Velocity LFO Steps
+slider10:lfo_phase=0<0,16,1>Velocity LFO Phase
 slider11:retrigger=0<0,1,1{Rest,Any Note Change}>Retrigger On
 slider12:single_note=0<0,1,1{No,Yes}>Single-Note Playthrough
 
