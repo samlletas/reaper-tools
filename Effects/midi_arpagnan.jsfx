@@ -10,10 +10,10 @@ slider3:1<1,4,1>Octaves
 slider4:resolution=7<0,23,1{1/64 Triplet,1/64,1/64 Dotted,1/32 Triplet,1/32,1/32 Dotted,1/16 Triplet,1/16,1/16 Dotted,1/8 Triplet,1/8,1/8 Dotted,1/4 Triplet,1/4,1/4 Dotted,1/2 Triplet,1/2,1/2 Dotted,1/1 Triplet,1/1,1/1 Dotted,2/1 Triplet,2/1,2/1 Dotted}>Resolution
 slider5:gate=1<0.1,1,0.1>Gate
 slider6:velocity=0<0,127,1>Velocity (0=use played velocity)
-slider7:lfo_wave=0<0,2,1{Sawtooth,Triangle,Square}>Velocity LFO Wave
-slider8:lfo_steps=8<2,32,1>Velocity LFO Steps
-slider9:lfo_phase=0<0,32,1>Velocity LFO Phase
-slider10:lfo_amount=0<-127,127,1>Velocity LFO Amount
+slider7:lfo_depth=0<-127,127,1>Velocity LFO Depth
+slider8:lfo_wave=0<0,2,1{Sawtooth,Triangle,Square}>Velocity LFO Wave
+slider9:lfo_steps=8<2,32,1>Velocity LFO Steps
+slider10:lfo_phase=0<0,32,1>Velocity LFO Phase
 slider11:retrigger=0<0,1,1{Rest,Any Note Change}>Retrigger On
 slider12:single_note=0<0,1,1{No,Yes}>Single-Note Playthrough
 
@@ -304,8 +304,8 @@ function map_range(s, a1, a2, b1, b2) (
 function get_velocity(s) local(v, target, v1, v2, step_pos) (
   v = (velocity > 0 && num_notes > single_note) ? velocity : svmap[s];
 
-  lfo_amount != 0 && num_notes > single_note ? (
-    target = min(max(v + lfo_amount, 0), 127);
+  lfo_depth != 0 && num_notes > single_note ? (
+    target = min(max(v + lfo_depth, 0), 127);
     step_pos = step_count + lfo_phase;
 
     lfo_wave == SAWTOOTH ? (
