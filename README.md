@@ -1,20 +1,18 @@
 # Reaper Tools
 
-A collection of customized effects and scripts for [Reaper](https://www.reaper.fm/).
-
 ## Download & Install
 Download the zip file from [here](https://github.com/samlletas/jsfx/archive/refs/heads/main.zip), extract
 it and copy the files into your Reaper folder.
 
 ## Effects
 
-### MIDI d'Arpagnan
+### MIDI Arpagnan
 
 Modified version of Jahudka's [d'Arpagnan Arpeggiator](https://github.com/jahudka/reaper-consolefx).
 I added more patterns with several possible directions each, also removed the backtrack controls
 since I didn't use them that much. Velocity is no longer hardcoded and it can be modulated via a LFO.
 
-![midi_darpagnan](https://github.com/samlletas/jsfx/assets/7089504/5a611bbe-d116-4dce-b67c-cc633018c41a)
+![midi_arpagnan](https://github.com/user-attachments/assets/bb8dddb6-e7f6-40ea-b6f2-e885ade38665)
 
 ## Scripts
 
