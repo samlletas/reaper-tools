@@ -1196,6 +1196,11 @@ if hzoom_mode == 3 or hzoom_mode == 4 then
     local cursor_qn = reaper.TimeMap2_timeToQN(0, cursor_pos)
     zoom_start_pos = convQNToTime(0, cursor_qn - sig_num * number_of_measures / 2)
     zoom_end_pos = convQNToTime(0, cursor_qn + sig_num * number_of_measures / 2)
+
+    -- Modification: Scroll to start of item
+    local zoom_offset = zoom_start_pos - item_start_pos
+    zoom_start_pos = zoom_start_pos - zoom_offset
+    zoom_end_pos = zoom_end_pos - zoom_offset
 end
 
 -- Set zoom to number of notes
