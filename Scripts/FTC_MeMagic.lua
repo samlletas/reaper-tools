@@ -75,10 +75,10 @@ local AID_vertical_zoom_mode = 3
 local use_toolbar_context_only = false
 
 -- Follow play cursor instead of edit cursor when playing
-local use_play_cursor = true
+local use_play_cursor = false
 
 -- Move edit cursor to mouse cursor
-local set_edit_cursor = false
+local set_edit_cursor = true
 
 ------------------------------ ZOOM SETTINGS -----------------------------
 
@@ -1240,6 +1240,11 @@ if hzoom_mode == 9 then
     zoom_start_pos = cursor_pos - hlength / 2
     zoom_end_pos = cursor_pos + hlength / 2
 end
+
+-- Modification: Scroll to edit cursor
+local zoom_offset = cursor_pos - zoom_start_pos
+zoom_start_pos = zoom_start_pos + zoom_offset
+zoom_end_pos = zoom_end_pos + zoom_offset
 
 ------------------------- HORIZONTAL ZOOM RANGE RESTRICTION ---------------------------
 
