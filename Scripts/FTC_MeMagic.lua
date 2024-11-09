@@ -62,12 +62,12 @@ local AVA_horizontal_zoom_mode = 5
 local AVA_vertical_zoom_mode = 3
 
 -- Context: Arrange view item single click (mouse modifier)
-local AIS_horizontal_zoom_mode = 5
+local AIS_horizontal_zoom_mode = 3
 local AIS_vertical_zoom_mode = 3
 
 -- Context: Arrange view item double click (mouse modifier)
 local AID_horizontal_zoom_mode = 2
-local AID_vertical_zoom_mode = 2
+local AID_vertical_zoom_mode = 3
 
 ------------------------------ GENERAL SETTINGS -----------------------------
 
@@ -83,7 +83,7 @@ local set_edit_cursor = false
 ------------------------------ ZOOM SETTINGS -----------------------------
 
 -- Number of measures to zoom to (for horizontal modes 3 and 4)
-local number_of_measures = 4
+local number_of_measures = 3
 
 -- Number of (approximate) notes to zoom to (for horizontal modes 5 and 6)
 local number_of_notes = 20
@@ -93,13 +93,13 @@ local number_of_notes = 20
 local smoothing = 0.75
 
 -- Which note to zoom to when item/visible area contains no notes
-local base_note = 60
+local base_note = 66
 
 -- Minimum number of vertical notes when zooming (not exact)
 local min_vertical_notes = 8
 
 -- Maximum vertical size for notes in pixels (smaller values increase performance)
-local max_vertical_note_pixels = 32
+local max_vertical_note_pixels = 16
 
 -- Use selected notes only
 local use_note_sel = false
