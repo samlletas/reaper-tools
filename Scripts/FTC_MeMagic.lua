@@ -83,7 +83,7 @@ local set_edit_cursor = true
 ------------------------------ ZOOM SETTINGS -----------------------------
 
 -- Number of measures to zoom to (for horizontal modes 3 and 4)
-local number_of_measures = 3
+local number_of_measures = 4
 
 -- Number of (approximate) notes to zoom to (for horizontal modes 5 and 6)
 local number_of_notes = 20
