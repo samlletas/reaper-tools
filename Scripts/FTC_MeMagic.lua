@@ -63,11 +63,11 @@ _G.AVA_horizontal_zoom_mode = 5
 _G.AVA_vertical_zoom_mode = 3
 
 -- Context: Arrange view item single click (mouse modifier)
-_G.AIS_horizontal_zoom_mode = 1
-_G.AIS_vertical_zoom_mode = 3
+_G.AIS_horizontal_zoom_mode = 3
+_G.AIS_vertical_zoom_mode = 2
 
 -- Context: Arrange view item double click (mouse modifier)
-_G.AID_horizontal_zoom_mode = 3
+_G.AID_horizontal_zoom_mode = 2
 _G.AID_vertical_zoom_mode = 3
 
 ------------------------------ GENERAL SETTINGS -----------------------------
@@ -94,13 +94,13 @@ _G.number_of_notes = 20
 _G.smoothing = 0.75
 
 -- Which note to zoom to when item/visible area contains no notes
-_G.base_note = 66
+_G.base_note = 59
 
 -- Minimum number of vertical notes when zooming (not exact)
 _G.min_vertical_notes = 8
 
 -- Maximum vertical size for notes in pixels (smaller values increase performance)
-_G.max_vertical_note_pixels = 16
+_G.max_vertical_note_pixels = 24
 
 -- Use selected notes only
 _G.use_note_sel = false
@@ -1074,11 +1074,8 @@ if sel_item and (editor_take ~= reaper.GetActiveTake(sel_item) or click_mode > 0
         end
     end
 
-    -- Modification: Keep zoom level on single click
-    if click_mode == 2 then
-      -- Cmd: Open in built-in MIDI editor
-      reaper.Main_OnCommand(40153, 0)
-    end
+    -- Cmd: Open in built-in MIDI editor
+    reaper.Main_OnCommand(40153, 0)
 
     if has_js_api then
         local _, list = reaper.JS_MIDIEditor_ListAll()
@@ -1251,9 +1248,11 @@ if hzoom_mode == 9 then
 end
 
 -- Modification: Scroll to edit cursor
-local zoom_offset = cursor_pos - zoom_start_pos
-zoom_start_pos = zoom_start_pos + zoom_offset
-zoom_end_pos = zoom_end_pos + zoom_offset
+if hzoom_mode ~= 2 then
+  local zoom_offset = cursor_pos - zoom_start_pos
+  zoom_start_pos = zoom_start_pos + zoom_offset
+  zoom_end_pos = zoom_end_pos + zoom_offset
+end
 
 ------------------------- HORIZONTAL ZOOM RANGE RESTRICTION ---------------------------
 
