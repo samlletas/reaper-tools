@@ -62,11 +62,11 @@ local AVA_horizontal_zoom_mode = 5
 local AVA_vertical_zoom_mode = 3
 
 -- Context: Arrange view item single click (mouse modifier)
-local AIS_horizontal_zoom_mode = 3
+local AIS_horizontal_zoom_mode = 1
 local AIS_vertical_zoom_mode = 3
 
 -- Context: Arrange view item double click (mouse modifier)
-local AID_horizontal_zoom_mode = 2
+local AID_horizontal_zoom_mode = 3
 local AID_vertical_zoom_mode = 3
 
 ------------------------------ GENERAL SETTINGS -----------------------------
@@ -1070,8 +1070,10 @@ if sel_item and (editor_take ~= reaper.GetActiveTake(sel_item) or click_mode > 0
         end
     end
 
-    -- Cmd: Open in built-in MIDI editor
-    reaper.Main_OnCommand(40153, 0)
+    if click_mode == 2 then
+      -- Cmd: Open in built-in MIDI editor
+      reaper.Main_OnCommand(40153, 0)
+    end
 
     if has_js_api then
         local _, list = reaper.JS_MIDIEditor_ListAll()
