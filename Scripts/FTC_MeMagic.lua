@@ -1074,6 +1074,7 @@ if sel_item and (editor_take ~= reaper.GetActiveTake(sel_item) or click_mode > 0
         end
     end
 
+    -- Modification: Keep zoom level on single click
     if click_mode == 2 then
       -- Cmd: Open in built-in MIDI editor
       reaper.Main_OnCommand(40153, 0)
