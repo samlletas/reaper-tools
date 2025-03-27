@@ -9,13 +9,13 @@
 ------------------------------ GENERAL SETTINGS -----------------------------
 
 -- Make this action non-contextual and always use modes from context: Toolbar button
-_G.use_toolbar_context_only = true
+_G.use_toolbar_context_only = false
 
 -- Use mouse cursor instead of edit cursor when applicable
-_G.use_mouse_cursor = true
+_G.use_mouse_cursor = false
 
 -- Use play cursor instead of edit cursor during playback
-_G.use_play_cursor = true
+_G.use_play_cursor = false
 
 -- Move edit cursor to mouse cursor
 _G.set_edit_cursor = false
@@ -76,11 +76,11 @@ _G.AVA_horizontal_zoom_mode = 5
 _G.AVA_vertical_zoom_mode = 3
 
 -- Context: Arrange view item single click (mouse modifier)
-_G.AIS_horizontal_zoom_mode = 5
-_G.AIS_vertical_zoom_mode = 3
+_G.AIS_horizontal_zoom_mode = 3
+_G.AIS_vertical_zoom_mode = 2
 
 -- Context: Arrange view item double click (mouse modifier)
-_G.AID_horizontal_zoom_mode = 8
+_G.AID_horizontal_zoom_mode = 3
 _G.AID_vertical_zoom_mode = 2
 
 ------------------------------ ZOOM SETTINGS -----------------------------
@@ -93,20 +93,20 @@ _G.number_of_notes = 20
 
 -- Controls how the view is positioned relative to the cursor when zooming
 -- 0: Cursor at left edge, 0.5: Centered, 1: Cursor at right edge
-_G.cursor_alignment = 0.5
+_G.cursor_alignment = 0
 
 -- Determines how influential the cursor position is in smart zoom modes
 -- No influence: 0,  High influence: >1,  Default: 0.75
 _G.smoothing = 0.75
 
 -- Which note to vertically zoom to when area contains no notes
-_G.base_note = 60
+_G.base_note = 59
 
 -- Minimum number of vertical notes when zooming (not exact)
 _G.min_vertical_notes = 8
 
 -- Maximum vertical size for notes in pixels (smaller values increase performance)
-_G.max_vertical_note_pixels = 32
+_G.max_vertical_note_pixels = 22
 
 -- Use selected notes only
 _G.use_note_sel = false
